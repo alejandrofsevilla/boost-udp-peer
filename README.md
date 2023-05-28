@@ -11,7 +11,6 @@ Asynchronous UDP Server and Client using [Boost.Asio](https://www.boost.org/doc/
 #include <UdpServer.hpp>
 #include <thread>
 #include <iostream>
-
 \\...
 struct : UdpServer::Observer {
   void onReceivedFrom(const char *data, size_t size,
@@ -38,7 +37,6 @@ server.startReceiving();
 #include <UdpClient.hpp>
 #include <thread>
 #include <iostream>
-
 \\...
 struct : UdpClient::Observer {
   void onReceivedFrom(const char *data, size_t size,
