@@ -54,7 +54,7 @@ void UdpPeer::closeSocket() {
   boost::system::error_code error;
   m_socket.close(error);
   if (error) {
-    std::cerr << "UDP Peer Socket Close error: " << error.message()
+    std::cerr << "UdpPeer::closeSocket() found error: " << error.message()
               << std::endl;
   }
   m_isReceiving = false;
@@ -70,13 +70,14 @@ void UdpPeer::doSend() {
   auto buffer = boost::asio::buffer(m_sendBuffer.data(), size);
   m_socket.async_send_to(
       buffer, endpoint,
-      [this](const auto &error, [[maybe_unused]] auto bytesTransferred) {
+      [this, size](const auto &error, [[maybe_unused]] auto bytesTransferred) {
         if (error) {
-          std::cout << "UDP Peer Send error: " << error.message() << std::endl;
+          std::cout << "UdpPeer::doSend() found error: " << error.message()
+                    << std::endl;
           return;
         }
         std::lock_guard<std::mutex> guard{m_sendMutex};
-        m_sendBuffer.consume(bytesTransferred);
+        m_sendBuffer.consume(size);
         m_sendDataInfo.pop_front();
         if (m_sendDataInfo.size() == 0) {
           m_isSending = false;
@@ -93,7 +94,7 @@ void UdpPeer::doReceive() {
       buffers, m_remoteEndpoint,
       [this](const auto &error, [[maybe_unused]] auto bytesTransferred) {
         if (error) {
-          std::cout << "UDP Peer Receive error: " << error.message()
+          std::cout << "UdpPeer::doReceive() found error: " << error.message()
                     << std::endl;
           return closeSocket();
         }
