@@ -74,7 +74,6 @@ void UdpPeer::doSend() {
         if (error) {
           std::cout << "UdpPeer::doSend() found error: " << error.message()
                     << std::endl;
-          return;
         }
         std::lock_guard<std::mutex> guard{m_sendMutex};
         m_sendBuffer.consume(size);
