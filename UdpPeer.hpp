@@ -25,7 +25,6 @@ class UdpPeer {
   void doSend();
   void doReceive();
 
-  boost::asio::io_context &m_ioContext;
   boost::asio::ip::udp::endpoint m_remoteEndpoint;
   boost::asio::streambuf m_receiveBuffer;
   boost::asio::streambuf m_sendBuffer;

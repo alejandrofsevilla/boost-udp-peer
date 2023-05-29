@@ -8,7 +8,6 @@ constexpr size_t f_messageMaxSize = 65535;
 
 UdpPeer::UdpPeer(boost::asio::io_context &ioContext, Observer &observer)
     : m_socket{ioContext},
-      m_ioContext{ioContext},
       m_remoteEndpoint{},
       m_receiveBuffer{},
       m_sendBuffer{},
@@ -26,7 +25,8 @@ bool UdpPeer::openSocket(const boost::asio::ip::udp &protocol) {
   boost::system::error_code error;
   m_socket.open(protocol, error);
   if (error) {
-    std::cerr << "UDP Peer Socket Open error: " << error.message() << std::endl;
+    std::cerr << "UDPPeer::openSocket found error: " << error.message()
+              << std::endl;
     return false;
   }
   return true;
