@@ -1,3 +1,4 @@
+# ![LinuxWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/Linux.yml/badge.svg)
 # Boost UDP Server/Client
 Asynchronous UDP Server and Client using [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio.html).
 ## Requirements
