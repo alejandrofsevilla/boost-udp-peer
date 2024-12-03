@@ -13,8 +13,6 @@ Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_a
 #include <thread>
 #include <iostream>
 
-//...
-
 struct : UdpServer::Observer {
   void onReceivedFrom(const char *data, size_t size,
                       const boost::asio::ip::udp::endpoint &endpoint) {
@@ -34,15 +32,12 @@ server.openSocket(boost::asio::ip::udp::v4());
 server.bind(1234);
 server.startReceiving();
 
-//...
 ```
 ### Client
 ```cpp
 #include <UdpClient.hpp>
 #include <thread>
 #include <iostream>
-
-//...
 
 struct : UdpClient::Observer {
   void onReceivedFrom(const char *data, size_t size,
@@ -62,5 +57,4 @@ UdpClient client{context, observer};
 client.openSocket(boost::asio::ip::udp::v4());
 client.startReceiving();
 
-//...
 ```
