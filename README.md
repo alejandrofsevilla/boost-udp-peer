@@ -31,7 +31,6 @@ UdpServer server{context, observer};
 server.openSocket(boost::asio::ip::udp::v4());
 server.bind(1234);
 server.startReceiving();
-
 ```
 ### Client
 ```cpp
@@ -56,5 +55,31 @@ UdpClient client{context, observer};
 
 client.openSocket(boost::asio::ip::udp::v4());
 client.startReceiving();
-
 ```
+## How to build
+- Install dependencies.
+  - linux 
+   ```terminal
+   sudo apt-get install libboost-dev
+   sudo apt-get install libgtest-dev
+   ```
+  - macOs
+   ```terminal
+   brew install boost
+   brew install googletest
+   ```
+- Clone repository.
+   ```terminal
+   git clone https://github.com/alejandrofsevilla/boost-udp-server-client.git
+   cd boost-tcp-server-client
+   ```
+- Build.
+   ```terminal
+   cmake -S . -B build
+   cmake --build build
+   ```
+- Run tests.
+   ```terminal
+   ./build/tests/boost-udp-server-client-tests 
+   ```
+
