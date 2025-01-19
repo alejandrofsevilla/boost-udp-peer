@@ -46,7 +46,7 @@ UdpClient client{context, observer};
 client.openSocket(boost::asio::ip::udp::v4());
 client.startReceiving();
 ```
-## How to build
+## Build
 - Install dependencies.
   - linux 
    ```terminal
@@ -72,4 +72,46 @@ client.startReceiving();
    ```terminal
    ./build/tests/boost-udp-server-client-tests 
    ```
+## Implementation
+```mermaid
+classDiagram
+    class C_0015175123961717550173["UdpPeer"]
+    class C_0015175123961717550173 {
+        +closeSocket() : void
+        -doReceive() : void
+        -doSend() : void
+        +openSocket(const boost::asio::ip::udp & protocol) : bool
+        +sendTo(const char * data, size_t size, const boost::asio::ip::udp::endpoint & endpoint) : void
+        +startReceiving() : void
+        -m_isReceiving : bool
+        -m_isSending : bool
+        -m_receiveBuffer : boost::asio::streambuf
+        -m_remoteEndpoint : boost::asio::ip::udp::endpoint
+        -m_sendBuffer : boost::asio::streambuf
+        -m_sendDataInfo : std::deque&lt;std::pair&lt;boost::asio::ip::udp::endpoint,size_t&gt;&gt;
+        -m_sendMutex : std::mutex
+        #m_socket : boost::asio::ip::udp::socket
+    }
+    class C_0017118870456923537943["UdpPeer::Observer"]
+    class C_0017118870456923537943 {
+        +onReceivedFrom(const char * data, size_t size, const boost::asio::ip::udp::endpoint & endpoint) : void
+    }
+    class C_0006076180002494955007["UdpServer"]
+    class C_0006076180002494955007 {
+        +bind(uint16_t port) : bool
+        -m_endpoint : boost::asio::ip::udp::endpoint
+    }
+    class C_0015224344871708291566["UdpClient"]
+    class C_0015224344871708291566 {
+    }
+    C_0015175123961717550173 --> C_0017118870456923537943 : -m_observer
+    C_0015175123961717550173 ()-- C_0017118870456923537943 : 
+    C_0006076180002494955007 ..> C_0017118870456923537943 : 
+    C_0015175123961717550173 <|-- C_0006076180002494955007 : 
+    C_0015224344871708291566 ..> C_0017118870456923537943 : 
+    C_0015175123961717550173 <|-- C_0015224344871708291566 : 
 
+%% Generated with clang-uml, version 0.6.0
+%% LLVM version Ubuntu clang version 15.0.7
+
+```
