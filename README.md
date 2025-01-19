@@ -1,4 +1,4 @@
-# ![LinuxWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/Linux.yml/badge.svg)
+# [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuild.yml?event=push) [![TestsWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuildAndTest.yml?event=push)
 # Boost UDP Server/Client
 Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio.html) UDP Server and Client example.
 ## Requirements
@@ -9,10 +9,6 @@ Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_a
 ## Usage
 ### Server
 ```cpp
-#include <UdpServer.hpp>
-#include <thread>
-#include <iostream>
-
 struct : UdpServer::Observer {
   void onReceivedFrom(const char *data, size_t size,
                       const boost::asio::ip::udp::endpoint &endpoint) {
@@ -27,17 +23,12 @@ boost::asio::io_context context;
 std::thread thread([&context]() { context.run(); });
 
 UdpServer server{context, observer};
-
 server.openSocket(boost::asio::ip::udp::v4());
 server.bind(1234);
 server.startReceiving();
 ```
 ### Client
 ```cpp
-#include <UdpClient.hpp>
-#include <thread>
-#include <iostream>
-
 struct : UdpClient::Observer {
   void onReceivedFrom(const char *data, size_t size,
                       const boost::asio::ip::udp::endpoint &endpoint) {
@@ -52,7 +43,6 @@ boost::asio::io_context context;
 std::thread thread([&context]() { context.run(); });
 
 UdpClient client{context, observer};
-
 client.openSocket(boost::asio::ip::udp::v4());
 client.startReceiving();
 ```
@@ -71,7 +61,7 @@ client.startReceiving();
 - Clone repository.
    ```terminal
    git clone https://github.com/alejandrofsevilla/boost-udp-server-client.git
-   cd boost-tcp-server-client
+   cd boost-udp-server-client
    ```
 - Build.
    ```terminal

@@ -4,22 +4,16 @@
 
 namespace {
 constexpr size_t f_messageMaxSize = 65535;
-}  // namespace
+} // namespace
 
 UdpPeer::UdpPeer(boost::asio::io_context &ioContext, Observer &observer)
-    : m_socket{ioContext},
-      m_remoteEndpoint{},
-      m_receiveBuffer{},
-      m_sendBuffer{},
-      m_sendDataInfo{},
-      m_sendMutex{},
-      m_observer{observer},
-      m_isReceiving{false},
-      m_isSending{false} {}
+    : m_socket{ioContext}, m_remoteEndpoint{}, m_receiveBuffer{},
+      m_sendBuffer{}, m_sendDataInfo{}, m_sendMutex{}, m_observer{observer},
+      m_isReceiving{false}, m_isSending{false} {}
 
-void UdpPeer::Observer::onReceivedFrom(
-    [[maybe_unused]] const char *data, [[maybe_unused]] size_t size,
-    [[maybe_unused]] const boost::asio::ip::udp::endpoint &endpoint) {}
+void UdpPeer::Observer::onReceivedFrom(const char *, size_t,
+                                       const boost::asio::ip::udp::endpoint &) {
+}
 
 bool UdpPeer::openSocket(const boost::asio::ip::udp &protocol) {
   boost::system::error_code error;
@@ -69,8 +63,7 @@ void UdpPeer::doSend() {
   auto size = dataInfo.second;
   auto buffer = boost::asio::buffer(m_sendBuffer.data(), size);
   m_socket.async_send_to(
-      buffer, endpoint,
-      [this, size](const auto &error, [[maybe_unused]] auto bytesTransferred) {
+      buffer, endpoint, [this, size](const auto &error, auto) {
         if (error) {
           std::cout << "UdpPeer::doSend() found error: " << error.message()
                     << std::endl;
@@ -91,7 +84,7 @@ void UdpPeer::doReceive() {
   auto buffers = m_receiveBuffer.prepare(f_messageMaxSize);
   m_socket.async_receive_from(
       buffers, m_remoteEndpoint,
-      [this](const auto &error, [[maybe_unused]] auto bytesTransferred) {
+      [this](const auto &error, auto bytesTransferred) {
         if (error) {
           std::cout << "UdpPeer::doReceive() found error: " << error.message()
                     << std::endl;
