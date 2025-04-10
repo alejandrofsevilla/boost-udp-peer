@@ -1,6 +1,6 @@
 # [![LinuxBuildWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuild.yml/badge.svg)](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuild.yml?event=push) [![TestsWorkflow](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuildAndTest.yml/badge.svg)](https://github.com/alejandrofsevilla/boost-udp-server-client/actions/workflows/LinuxBuildAndTest.yml?event=push)
 # Boost UDP Server/Client
-Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio.html) UDP Server and Client example.
+Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio.html) UDP Sender and Receiver example.
 ## Requirements
 - C++ 17 compiler
 - CMake 3.22.0
