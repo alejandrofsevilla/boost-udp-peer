@@ -6,25 +6,24 @@
 #include <utility>
 
 class UdpPeer {
- public:
+public:
   struct Observer {
     virtual void onReceivedFrom(const char *data, size_t size,
                                 const boost::asio::ip::udp::endpoint &endpoint);
   };
+
+  UdpPeer(boost::asio::io_context &ioContext, Observer &observer);
+
   bool openSocket(const boost::asio::ip::udp &protocol);
+  bool bind(uint16_t port);
   void startReceiving();
   void sendTo(const char *data, size_t size,
               const boost::asio::ip::udp::endpoint &endpoint);
   void closeSocket();
 
- protected:
-  UdpPeer(boost::asio::io_context &ioContext, Observer &observer);
+protected:
+private:
   boost::asio::ip::udp::socket m_socket;
-
- private:
-  void doSend();
-  void doReceive();
-
   boost::asio::ip::udp::endpoint m_remoteEndpoint;
   boost::asio::streambuf m_receiveBuffer;
   boost::asio::streambuf m_sendBuffer;
@@ -33,6 +32,9 @@ class UdpPeer {
   Observer &m_observer;
   bool m_isReceiving;
   bool m_isSending;
+
+  void doSend();
+  void doReceive();
 };
 
 #endif

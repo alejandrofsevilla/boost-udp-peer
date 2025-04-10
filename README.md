@@ -2,14 +2,17 @@
 # Boost UDP Server/Client
 Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_asio.html) UDP Server and Client example.
 ## Requirements
-- C++ 17
+- C++ 17 compiler
 - CMake 3.22.0
 - Boost 1.74.0
 - GoogleTest 1.11.0
 ## Usage
-### Server
 ```cpp
-struct : UdpServer::Observer {
+
+boost::asio::io_context context;
+std::thread thread([&context]() { context.run(); });
+
+struct : UdpPeer::Observer {
   void onReceivedFrom(const char *data, size_t size,
                       const boost::asio::ip::udp::endpoint &endpoint) {
     std::cout << "data received from endpoint address "
@@ -19,32 +22,20 @@ struct : UdpServer::Observer {
   };
 } observer;
 
-boost::asio::io_context context;
-std::thread thread([&context]() { context.run(); });
+auto protocol{boost::asio::ip::udp::v4()};
+uint16_t receiverPort{1234};
+boost::asio::ip::udp::endpoint receiverEndpoint{protocol, receiverPort};
 
-UdpServer server{context, observer};
-server.openSocket(boost::asio::ip::udp::v4());
-server.bind(1234);
-server.startReceiving();
-```
-### Client
-```cpp
-struct : UdpClient::Observer {
-  void onReceivedFrom(const char *data, size_t size,
-                      const boost::asio::ip::udp::endpoint &endpoint) {
-    std::cout << "data received from endpoint address "
-              << endpoint.address().to_string() << ": ";
-    std::cout.write(data, size);
-    std::cout << std::endl;
-  };
-} observer;
+UdpPeer receiver{context, observer};
+receiver.openSocket();
+receiver.bind(receiverPort);
+receiver.startReceiving();
 
-boost::asio::io_context context;
-std::thread thread([&context]() { context.run(); });
+UdpPeer sender{context, observer};
+receiver.openSocket(boost::asio::ip::udp::v4());
+std::string msg("example");
+receiver.sendTo(msg, msg.size(),receiverEndpoint);
 
-UdpClient client{context, observer};
-client.openSocket(boost::asio::ip::udp::v4());
-client.startReceiving();
 ```
 ## Build
 - Install dependencies.
@@ -60,8 +51,8 @@ client.startReceiving();
    ```
 - Clone repository.
    ```terminal
-   git clone https://github.com/alejandrofsevilla/boost-udp-server-client.git
-   cd boost-udp-server-client
+   git clone https://github.com/alejandrofsevilla/boost-udp-peer.git
+   cd boost-udp-peer
    ```
 - Build.
    ```terminal
@@ -70,48 +61,5 @@ client.startReceiving();
    ```
 - Run tests.
    ```terminal
-   ./build/tests/boost-udp-server-client-tests 
+   ./build/tests/boost-udp-peer-tests 
    ```
-## Implementation
-```mermaid
-classDiagram
-    class C_0015175123961717550173["UdpPeer"]
-    class C_0015175123961717550173 {
-        +closeSocket() : void
-        -doReceive() : void
-        -doSend() : void
-        +openSocket(const boost::asio::ip::udp & protocol) : bool
-        +sendTo(const char * data, size_t size, const boost::asio::ip::udp::endpoint & endpoint) : void
-        +startReceiving() : void
-        -m_isReceiving : bool
-        -m_isSending : bool
-        -m_receiveBuffer : boost::asio::streambuf
-        -m_remoteEndpoint : boost::asio::ip::udp::endpoint
-        -m_sendBuffer : boost::asio::streambuf
-        -m_sendDataInfo : std::deque&lt;std::pair&lt;boost::asio::ip::udp::endpoint,size_t&gt;&gt;
-        -m_sendMutex : std::mutex
-        #m_socket : boost::asio::ip::udp::socket
-    }
-    class C_0017118870456923537943["UdpPeer::Observer"]
-    class C_0017118870456923537943 {
-        +onReceivedFrom(const char * data, size_t size, const boost::asio::ip::udp::endpoint & endpoint) : void
-    }
-    class C_0006076180002494955007["UdpServer"]
-    class C_0006076180002494955007 {
-        +bind(uint16_t port) : bool
-        -m_endpoint : boost::asio::ip::udp::endpoint
-    }
-    class C_0015224344871708291566["UdpClient"]
-    class C_0015224344871708291566 {
-    }
-    C_0015175123961717550173 --> C_0017118870456923537943 : -m_observer
-    C_0015175123961717550173 ()-- C_0017118870456923537943 : 
-    C_0006076180002494955007 ..> C_0017118870456923537943 : 
-    C_0015175123961717550173 <|-- C_0006076180002494955007 : 
-    C_0015224344871708291566 ..> C_0017118870456923537943 : 
-    C_0015175123961717550173 <|-- C_0015224344871708291566 : 
-
-%% Generated with clang-uml, version 0.6.0
-%% LLVM version Ubuntu clang version 15.0.7
-
-```
