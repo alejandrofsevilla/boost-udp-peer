@@ -6,7 +6,7 @@ Asynchronous [Boost.Asio](https://www.boost.org/doc/libs/1_74_0/doc/html/boost_a
 - CMake 3.22.0
 - Boost 1.74.0
 - GoogleTest 1.11.0
-## Usage
+## Example
 ```cpp
 
 boost::asio::io_context context;
