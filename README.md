@@ -34,7 +34,7 @@ receiver.startReceiving();
 UdpPeer sender{context, observer};
 receiver.openSocket(boost::asio::ip::udp::v4());
 std::string msg("example");
-receiver.sendTo(msg, msg.size(),receiverEndpoint);
+receiver.sendTo(msg.data(), msg.size(),receiverEndpoint);
 
 ```
 ## Build
