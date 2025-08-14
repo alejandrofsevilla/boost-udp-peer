@@ -53,8 +53,7 @@ TEST(UdpTest, SendAndReceive) {
   sender.bind(senderPort);
   std::thread thread([&context]() { context.run(); });
   auto msg{generateRandomString(messageSize)};
-  sender.sendTo(msg.data(), msg.size(),
-                boost::asio::ip::udp::endpoint{protocol, receiverPort});
+  sender.sendTo(msg.data(), msg.size(), {protocol, receiverPort});
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
   EXPECT_EQ(receiverObserver.msg, msg);
   context.stop();
