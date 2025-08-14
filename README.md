@@ -22,13 +22,9 @@ struct : UdpPeer::Observer {
   };
 } observer;
 
-auto protocol{boost::asio::ip::udp::v4()};
-uint16_t receiverPort{1234};
-boost::asio::ip::udp::endpoint receiverEndpoint{protocol, receiverPort};
-
 UdpPeer receiver{context, observer};
-receiver.openSocket();
-receiver.bind(receiverPort);
+receiver.openSocket(boost::asio::ip::udp::v4());
+receiver.bind(1234);
 receiver.startReceiving();
 
 UdpPeer sender{context, observer};
