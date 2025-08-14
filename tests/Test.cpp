@@ -31,7 +31,7 @@ TEST(UdpTest, Bind) {
 }
 
 TEST(UdpTest, SendAndReceive) {
-  constexpr uint16_t senderPort{1234};
+  //constexpr uint16_t senderPort{1234};
   constexpr uint16_t receiverPort{5678};
   constexpr size_t messageSize{1000};
   const auto protocol{boost::asio::ip::udp::v4()};
@@ -50,7 +50,7 @@ TEST(UdpTest, SendAndReceive) {
   UdpPeer::Observer senderObserver;
   UdpPeer sender{context, senderObserver};
   sender.openSocket(protocol);
-  sender.bind(senderPort);
+  //sender.bind(senderPort);
   std::thread thread([&context]() { context.run(); });
   auto msg{generateRandomString(messageSize)};
   sender.sendTo(msg.data(), msg.size(), {protocol, receiverPort});
